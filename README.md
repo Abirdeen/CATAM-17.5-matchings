@@ -107,3 +107,46 @@ $$ \lim_{n\rightarrow \infty} \mathbb{P}(G_n \text{ has a matching}) = \begin{ca
 
 Indeed, this theoretical criterion is reflected in our results, where $p < \frac{\ln n}{n} \approx 0.068$ generally results in a blocking set, $p\approx \frac{\ln n}{n}$ results in a mix of blocking sets and matchings, while $p > \frac{\ln n}{n}$ generally results in a matching. 
 
+### Problem 4
+
+Run your program on ten random bipartite graph processes, with $n = 40$. Tabulate your results. What simple properties of a graph are necessary for a complete matching to exist?
+
+#### Solution
+
+We use the following code to compute our results:
+```haskell
+results :: GraphSize -> Int -> [(Int, Int)]
+results _ 0 = []
+results k iter = result:results k (iter - 1)
+    where result = (firstMatching, lastIsolatedVertex)
+          rList = randomList (20020 + iter)
+          (process, _) = completeBipartiteProcess k rList
+          matchingsAndBlockings = [(not.null.snd) (findMatching g) | g <- process]
+          firstMatching = length (filter id matchingsAndBlockings) +1
+          noIsolatedVertex = length (filter (>0) [(2*k) - length eList | (eList,_) <- process]) +1
+          
+main :: IO ()
+main = do 
+    print (results 40 10)
+```
+Our results are tabulated below:
+
+| Process number | Number of edges for first matching | Number of edges before all vertices are non-isolated |
+| -------------- | --------------------------------- | --- |
+| 1              | 228                               | 228 |
+| 2              | 144                               | 141 |
+| 3              | 189                               | 179 |
+| 4              | 155                               | 155 |
+| 5              | 179                               | 165 |
+| 6              | 172                               | 172 |
+| 7              | 180                               | 180 |
+| 8              | 137                               | 137 |
+| 9              | 244                               | 244 |
+| 10             | 167                               | 167 |
+
+Based on the comments in the previous section, we should expect the first matching to appear after around $n \ln n \approx 147.55$ edges. Indeed, this is borne out by our results: in the worst case, we only need an additional $5\%$ of possible edges before a matching appears.
+
+A simple property that is necessary for a matching to exist is that there are no isolated vertices. It is notable that in 7 of 10 cases, a matching appeared precisely when there were no remaining isolated vertices. 
+
+From the same work of Erdős and Rényi as before, the critical point for isolated vertices is also at around $p = \frac{\ln n}{n}$, so this behaviour is also expected.
+
