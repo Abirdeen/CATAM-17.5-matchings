@@ -53,3 +53,57 @@ If $V \not \subseteq B$, then in particular we can find a vertex $v \not\in B$ a
 
 If $V \subseteq B$, then $\Gamma(A \cup \{u\}) = B$, so $$\left| \Gamma(A \cup \{u\}) \right| = \left| B \right| = \left| A \right| < \left| A \right| + 1 = \left| A \cup \{u\} \right|,$$ that is, $A \cup \{u\}$ is a blocking set.
 
+### Problem 3
+
+Implement an algorithm to find a complete matching. The output should show (at least) whether a complete matching exists or, if not, the size of a blocking set. For each of the seven values of $p$ varying from 0.05 to 0.35 by steps of 0.05, and from $0.1 \times \frac{\ln n}{n}$ to $1.9 \times \frac{\ln n}{n}$ by steps of $0.3 \times \frac{\ln n}{n}$, run the program on twenty random $n \times n$ bipartite graphs with $n = 60$.
+
+#### Solution
+
+This algorithm is implemented as `findMatching` in the `MatchAlgs` modules.
+
+We use the following code to compute our results, with a trivial modification for the second set:
+```haskell
+results :: Probability -> GraphSize -> Int -> Int -> [(Probability, Int, Int, Double)]
+results _ _ _ 0 = []
+results p k numDraws iter = result:results p k numDraws (iter - 1)
+    where result = (prob, numMatchings, numBlockings, avgBlockingSize)
+          prob = fromInteger (round (100 * (p * fromIntegral iter))) / 100
+          matchingsAndBlockings = [findMatching (fst (randomBipartiteGraph k prob (randomList ((1777779+iter)*x)))) | x <- [1..numDraws]]
+          numMatchings = length (filter (null.snd) matchingsAndBlockings)
+          blockingSizes = [length b | (_,Just b) <- filter (null.fst) matchingsAndBlockings]
+          numBlockings = length blockingSizes
+          avgBlockingSize = fromIntegral (sum blockingSizes) / fromIntegral (max numBlockings 1)
+
+main :: IO ()
+main = do 
+    print (results 0.05 60 20 7)
+```
+
+Our results are tabulated below:
+
+| $p$  | $N^o$ of Matchings | $N^o$ of blocking sets | Avg. size of blocking set |
+| ---  | ------------------ | ---------------------- | ------------------------- |
+| 0.05 | 0                  | 20                     | 11.95                     |
+| 0.10 | 17                 | 3                      | 45.67                     |
+| 0.15 | 20                 | 0                      | N/A                       |
+| 0.20 | 20                 | 0                      | N/A                       |
+| 0.25 | 20                 | 0                      | N/A                       |
+| 0.30 | 20                 | 0                      | N/A                       |
+| 0.35 | 20                 | 0                      | N/A                       |
+|      |                    |                        |                           |
+| $0.1\frac{\ln n}{n}$ | 0  | 20                     | 1.55                      |
+| $0.4\frac{\ln n}{n}$ | 0  | 20                     | 7.25                      |
+| $0.7\frac{\ln n}{n}$ | 0  | 20                     | 13.8                      |
+| $1.0\frac{\ln n}{n}$ | 4  | 16                     | 34.5                      |
+| $1.3\frac{\ln n}{n}$ | 17 | 3                      | 36.0                      |
+| $1.6\frac{\ln n}{n}$ | 20 | 0                      | N/A                       |
+| $1.9\frac{\ln n}{n}$ | 19 | 1                      | 16.0                      |
+
+A classic result of Erdős and Rényi[$^{[1]}$](#1)[$^{[2]}$](#2) established the critical point for a random bipartite graph to have a matching.
+
+Given a probability $p = \frac{f(n)+\ln n}{n}$, the probability that a random bipartite graph of edge weight $p$ will have a matching (as $n \rightarrow \infty$) is
+
+$$ \lim_{n\rightarrow \infty} \mathbb{P}(G_n \text{ has a matching}) = \begin{cases} 0 & f(n) \rightarrow \infty \\ e^{-2e^{-c}} & f(n) \rightarrow c \\ 1 & f(n) \rightarrow \infty \end{cases} $$
+
+Indeed, this theoretical criterion is reflected in our results, where $p < \frac{\ln n}{n} \approx 0.068$ generally results in a blocking set, $p\approx \frac{\ln n}{n}$ results in a mix of blocking sets and matchings, while $p > \frac{\ln n}{n}$ generally results in a matching. 
+
