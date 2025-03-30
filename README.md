@@ -25,3 +25,16 @@ Given a matching $M$ between $A \subseteq X$ and $B \subseteq Y$, an alternating
 
 We can use the set of vertices reachable from $u$ to find either a blocking set, or a larger matching, as discussed in Problem 2.
 
+## Problems
+
+The original CATAM project involved certain explicit questions and problems, which are reproduced (and solved) here.
+
+### Problem 1
+
+One algorithm to check whether G has a complete matching is to check each subset A to see if it is a blocking set. Why is this a poor method?
+
+#### Solution
+
+There are two major problems with this method: 
+1. It is non-constructive, meaning that when a complete matching exists, this algorithm will not tell us what such a matching looks like;
+2. There are $2^n$ subsets of a size $n$ bipartite graph, so the runtime of this algorithm will be at least exponential.
