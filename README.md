@@ -150,3 +150,19 @@ A simple property that is necessary for a matching to exist is that there are no
 
 From the same work of Erdős and Rényi as before, the critical point for isolated vertices is also at around $p = \frac{\ln n}{n}$, so this behaviour is also expected.
 
+### Problem 5
+
+What is the (order of magnitude) complexity of your algorithm?
+
+#### Solution
+
+We divide this question into parts. 
+
+First, given a matching, what is the complexity of finding an alternating path? Suppose the matching is of size $k$, that is, there are $k$ pairs of vertices in the matching. We perform a depth-first search on the vertices, which is known to have a runtime of $O(V+E)$, where $V$ is the number of vertices and $E$ is the number of edges. We expect around $pn^2$ edges in our random graph, so if $p$ is constant, this has a runtime of $O(n^2)$. 
+
+Extending a matching given an alternating path, or finding a blocking set when no alternating path exists, both take linear time. 
+
+Finally, to go from an empty matching to a complete matching, we must find an alternating path $n$ times (once for each vertext of $X$).
+
+So the total complexity is $O(n^3)$.
+
