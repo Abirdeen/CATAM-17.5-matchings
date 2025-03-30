@@ -166,3 +166,21 @@ Finally, to go from an empty matching to a complete matching, we must find an al
 
 So the total complexity is $O(n^3)$.
 
+### Problem 6
+
+Is the alternating path method for finding a complete matching effective for all graphs, and not just bipartite ones?
+
+#### Solution
+
+[Berge's Theorem](https://en.wikipedia.org/wiki/Berge%27s_theorem) establishes that a matching is maximum if and only if there is no alternating path with respect to it, so the alternating path method is appropriate in general. The [Tutte Theorem](https://en.wikipedia.org/wiki/Tutte_theorem) establishes conditions that prevent a matching in a general graph.
+
+## References
+<a id="1">[1]</a> 
+Erdős, P. and Rényi, A. (1964). 
+On Random Matrices.
+_Publications of the Mathematical Institute of the Hungarian Academy of Sciences_, 8, 455-461.
+
+<a id="2">[2]</a> 
+Erdős, P. and Rényi, A. (1966). 
+On the existence of a factor of degree one of a connected random graph.
+_Acta Mathematica Hungarica_, 17, 359-368.
