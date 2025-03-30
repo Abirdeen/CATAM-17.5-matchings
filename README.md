@@ -12,3 +12,16 @@ The aim of this project is to study [matchings](https://en.wikipedia.org/wiki/Ma
 ### Random bipartite graphs and processes
 
 For much of this project, we want to study either random bipartite graphs, where edges of the complete bipartite graph are included with probability $p$, or random bipartite processes, where we add random edges to an empty bipartite graph until we have a complete one. These algorithms are implemented in `randomGraph` and `completeBipartiteProcess`, respectively, in the `GraphGenerator` module.
+
+### Hall's theorem
+
+The celebrated [Hall's theorem](https://en.wikipedia.org/wiki/Hall%27s_marriage_theorem) tells us that an $n \times n$ bipartite graph $(G,X,Y)$ has either a complete matching or a blocking set, that is, either there is a set of $n$ independent edges in $G$, or there is a set $A \subseteq X$ with $$|\Gamma(A)| = |\{ b \in Y | \exists a \in A, (a,b) \in G \}| < |A|.$$ 
+
+From this result, we want to develop an algorithm that, given a bipartite graph (either as an [adjacency matrix](https://en.wikipedia.org/wiki/Adjacency_matrix) or an [adjacency list](https://en.wikipedia.org/wiki/Adjacency_list)), will output either a complete matching or a maximal matching and a blocking set.
+
+### Alternating paths
+
+Given a matching $M$ between $A \subseteq X$ and $B \subseteq Y$, an alternating path is a path from ${u \in X \backslash A}$ to some ${v \in Y}$ such that every second edge of the path is in $M$. We say that $v$ is reachable from $u$ by an alternating path. 
+
+We can use the set of vertices reachable from $u$ to find either a blocking set, or a larger matching, as discussed in Problem 2.
+
