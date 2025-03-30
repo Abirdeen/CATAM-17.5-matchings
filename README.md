@@ -38,3 +38,18 @@ One algorithm to check whether G has a complete matching is to check each subset
 There are two major problems with this method: 
 1. It is non-constructive, meaning that when a complete matching exists, this algorithm will not tell us what such a matching looks like;
 2. There are $2^n$ subsets of a size $n$ bipartite graph, so the runtime of this algorithm will be at least exponential.
+
+### Problem 2
+
+Suppose $M$ is a matching between $A \subseteq X$ and $B \subseteq Y$. Pick $u \in X \backslash A$, and consider the set of vertices reachable from $u$, which we write as $V$.
+
+- How can a matching larger than $M$ be found if $V \not\subseteq B$?
+
+- How can a blocking set be found if $V \subseteq B$?
+
+#### Solution
+
+If $V \not \subseteq B$, then in particular we can find a vertex $v \not\in B$ and an alternating path from $u$ to $v.$ By adding the odd edges of this path to $M$ and removing the even ones, we obtain a strictly larger matching.
+
+If $V \subseteq B$, then $\Gamma(A \cup \{u\}) = B$, so $$\left| \Gamma(A \cup \{u\}) \right| = \left| B \right| = \left| A \right| < \left| A \right| + 1 = \left| A \cup \{u\} \right|,$$ that is, $A \cup \{u\}$ is a blocking set.
+
